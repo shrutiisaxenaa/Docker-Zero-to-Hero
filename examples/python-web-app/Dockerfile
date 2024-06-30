@@ -3,19 +3,15 @@ FROM ubuntu
 WORKDIR /app
 
 COPY requirements.txt /app
-COPY devops /app
+COPY devops /app/devops
 
-ENV PIP_BREAK_SYSTEM_PACKAGES 1
+# Set the environment variable to allow pip to break system packages
+ENV PIP_BREAK_SYSTEM_PACKAGES=1
 
-RUN /bin/sh -c
-    apt-get update && \
+# Install Python and pip, then install requirements
+RUN apt-get update && \
     apt-get install -y python3 python3-pip && \
-    pip install -r requirements.txt && \
-    cd devops
+    pip install -r requirements.txt
 
 ENTRYPOINT ["python3"]
-CMD ["manage.py", "runserver", "0.0.0.0:8000"]
-
-
-
-
+CMD ["devops/manage.py", "runserver", "0.0.0.0:8000"]
